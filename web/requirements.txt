@@ -1,0 +1,6 @@
+Django==4.0
+python-decouple
+psycopg2-binary
+djangorestframework
+djangorestframework_simplejwt
+django-phonenumber-field[phonenumberslite]
