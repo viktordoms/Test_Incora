@@ -9,18 +9,12 @@ from .models import User
 
 class UserCreate(APIView):
 
-    # Потім видалити
-    def get(self, request, format=None):
-        snippets = User.objects.all()
-        serializer = UserProfileSerializer(snippets, many=True)
-        return Response(serializer.data)
-
     def post(self, request, format='json'):
         serializer = UserProfileSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            exist_email = User.objects.filter(email=request.data['email'])
-            if exist_email:
+            try:
+                user = serializer.save()
+            except:
                 return Response('User with this email is already exist', status=status.HTTP_400_BAD_REQUEST)
             if user:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -48,9 +42,9 @@ class UserDetail(APIView):
         user = self.get_object(pk)
         serializer = UserProfileSerializer(user, data=request.data)
         if serializer.is_valid():
-            exist_email = User.objects.filter(email=request.data['email']).exclude(id=pk)
-            if exist_email:
+            try:
+                 serializer.save()
+            except:
                 return Response('User with this email is already exist', status=status.HTTP_400_BAD_REQUEST)
-            serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
