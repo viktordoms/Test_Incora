@@ -20,3 +20,6 @@ Run backend:
 5. Enter: python3 manage.py makemigrations
 6. Enter: python3 manage.py migrate
 7. Close this terminal and restart docker-compose: sudo docker-compose up --build
+
+Test Socket:
+In browser open page with URLs 'http://0.0.0.0:8011/api/test/' and make PUT-request

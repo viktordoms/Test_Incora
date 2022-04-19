@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,10 +30,7 @@ class UserCreate(APIView):
 class UserDetail(APIView):
 
     def get_object(self, pk):
-        try:
-            return User.objects.get(pk=pk)
-        except:
-            raise Http404
+        return get_object_or_404(User, pk=pk)
 
     def get(self, request, pk, format=None):
         user = self.get_object(pk)
@@ -49,10 +45,10 @@ class UserDetail(APIView):
         serializer = UserProfileSerializer(user, data=request.data)
         if serializer.is_valid():
             try:
-                 serializer.save()
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
             except IntegrityError:
                 return Response('User with this email is already exist', status=status.HTTP_400_BAD_REQUEST)
-            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
