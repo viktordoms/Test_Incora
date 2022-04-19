@@ -1,10 +1,17 @@
 from django.http import Http404
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.db import IntegrityError
+
 
 from .serializers import UserProfileSerializer
 from .models import User
+
+
+def test_socket(request):
+    return render(request, 'index.html')
 
 
 class UserCreate(APIView):
@@ -14,11 +21,10 @@ class UserCreate(APIView):
         if serializer.is_valid():
             try:
                 user = serializer.save()
-            except:
-                return Response('User with this email is already exist', status=status.HTTP_400_BAD_REQUEST)
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+                if user:
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response("User with this email is already exist", status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -44,7 +50,10 @@ class UserDetail(APIView):
         if serializer.is_valid():
             try:
                  serializer.save()
-            except:
+            except IntegrityError:
                 return Response('User with this email is already exist', status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+

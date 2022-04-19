@@ -1,8 +1,9 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import UserCreate, UserDetail
+from .views import UserCreate, UserDetail, test_socket
 
 urlpatterns = [
+    path('test/', test_socket),
     path("users/", UserCreate.as_view(), name="register"),
     path("users/<int:pk>/", UserDetail.as_view(), name='detail'),
     path("login/", TokenObtainPairView.as_view(), name="token_obtain"),

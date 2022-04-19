@@ -4,3 +4,6 @@ psycopg2-binary
 djangorestframework
 djangorestframework_simplejwt
 django-phonenumber-field[phonenumberslite]
+channels
+channels-redis
+djangochannelsrestframework

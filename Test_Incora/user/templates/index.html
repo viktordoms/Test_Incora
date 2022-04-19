@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UsersSocket</title>
+</head>
+<body>
+<pre id="response"></pre>
+</body>
+<script>
+
+    request_id = new Date().getTime()
+
+    const ws = new WebSocket(
+        'ws://' + window.location.host + '/ws/');
+
+    ws.onopen = function () {
+        ws.send(
+            JSON.stringify({
+                action: "list",
+                request_id:  new Date().getTime()
+            })
+        );
+
+        ws.send(
+            JSON.stringify({
+            action: 'subscribe_to_message',
+            request_id:  new Date().getTime()
+            })
+        );
+
+    };
+    ws.onmessage = function (e){
+        const data = JSON.parse(e.data);
+        switch (data.action){
+            case 'update':
+                document.getElementById("response").textContent = JSON.stringify(JSON.parse(e.data), undefined, 2);
+                alert(`User with email: ${data.data['email']} - update!!!`)
+
+            default:
+                break
+        }
+    }
+
+
+</script>
+</html>

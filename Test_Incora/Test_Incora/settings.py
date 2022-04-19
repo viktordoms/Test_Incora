@@ -22,7 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
+    'channels',
     'rest_framework',
     'user.apps.UserConfig',
     "phonenumber_field",
@@ -57,7 +58,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Test_Incora.wsgi.application'
+ASGI_APPLICATION = 'Test_Incora.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('172.27.0.1', 6364)]
+        },
+    },
+}
 
 DATABASES = {
     'default': {
